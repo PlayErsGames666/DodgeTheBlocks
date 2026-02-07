@@ -2,7 +2,7 @@ import pygame
 import random
 import sys
 
-# ---------- НАСТРОЙКИ ----------
+# Settings
 WIDTH, HEIGHT = 600, 800
 PLAYER_SIZE = 50
 BLOCK_SIZE = 50
@@ -10,20 +10,20 @@ PLAYER_SPEED = 7
 BLOCK_SPEED = 5
 SPAWN_TIME = 900  # мс
 
-# ---------- ИНИЦИАЛИЗАЦИЯ ----------
+# Inicialisation
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dodge the Blocks")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("arial", 32)
 
-# ---------- ИГРОК ----------
+# User
 player = pygame.Rect(WIDTH // 2 - PLAYER_SIZE // 2,
                      HEIGHT - PLAYER_SIZE - 20,
                      PLAYER_SIZE,
                      PLAYER_SIZE)
 
-# ---------- ВРАГИ ----------
+# Enemy
 blocks = []
 SPAWN_BLOCK = pygame.USEREVENT
 pygame.time.set_timer(SPAWN_BLOCK, SPAWN_TIME)
@@ -31,12 +31,12 @@ pygame.time.set_timer(SPAWN_BLOCK, SPAWN_TIME)
 score = 0
 running = True
 
-# ---------- ГЛАВНЫЙ ЦИКЛ ----------
+# Main Cycle
 while running:
     clock.tick(60)
     screen.fill((20, 20, 30))
 
-    # ----- СОБЫТИЯ -----
+    # Event
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -47,7 +47,7 @@ while running:
             block = pygame.Rect(x, -BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
             blocks.append(block)
 
-    # ----- УПРАВЛЕНИЕ -----
+    # Control
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
         player.x -= PLAYER_SPEED
@@ -56,7 +56,7 @@ while running:
 
     player.x = max(0, min(WIDTH - PLAYER_SIZE, player.x))
 
-    # ----- ДВИЖЕНИЕ БЛОКОВ -----
+    # Block Movement
     for block in blocks[:]:
         block.y += BLOCK_SPEED
 
@@ -69,7 +69,7 @@ while running:
         if block.colliderect(player):
             running = False
 
-    # ----- ОТРИСОВКА -----
+    # Rendering
     pygame.draw.rect(screen, (0, 200, 255), player)
 
     for block in blocks:
@@ -80,7 +80,7 @@ while running:
 
     pygame.display.flip()
 
-# ---------- GAME OVER ----------
+# GAME OVER
 screen.fill((0, 0, 0))
 game_over = font.render("GAME OVER", True, (255, 80, 80))
 final_score = font.render(f"Final Score: {score}", True, (255, 255, 255))
